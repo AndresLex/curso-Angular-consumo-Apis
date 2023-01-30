@@ -1,0 +1,18 @@
+Curso de Consumo de API rest con Angular. 
+
+Angular es un gran framework de desarrollo front-end con todo un ecosistema de herramientas que te facilitan el trabajo a la hora de desarrollar una aplicación.
+
+En este curso, aprenderás todo lo relacionado con el consumo de APIs con Angular, utilizando su Cliente HTTP.
+
+Otros temas que vas a explorar
+Además de estos conocimientos también profundizarás en los siguientes temas:
+
+Buenas prácticas de desarrollo
+Verbos HTTP
+Conexión HTTP con API Rest
+CORS
+Manejo de ambientes en Angular
+Autentificación
+Seguridad y tokens
+Manejo avanzado de Observables con RxJS
+Descarga y subida de archivos

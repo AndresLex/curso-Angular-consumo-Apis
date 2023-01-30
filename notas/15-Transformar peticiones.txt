@@ -1,0 +1,40 @@
+Transformar peticiones
+
+A veces puede ser necesario hacer transformaciones a la respuesta de una petición, para poner ejemplo agregar datos para complementar la información que entrega el backend.
+
+RXJS .map() → Es un operador que permite tomar cada uno de los valores que lleguen en el observable y aplicarles una transformación.
+
+// Obtener los productos desde la API
+  getProducts(limit?: number, offset?: number) {
+    ...
+    return this.http.get<Product[]>(this.apiUrl, { params })
+    .pipe(
+      map(products => products.map(item => {
+        return {
+          ...item,
+          taxes: .19 * item.price
+        }
+      }))
+    )
+  }
+
+products → Agrupa la respuesta del observable, esta es un array. Luego se usa un map nativo para agregar el atributo taxes a cada objeto dentro de products.
+
+Nota: Se debe agregar la propiedad "taxes" en la interfaz del array Product[] como opcional "?"
+            export interface Product {
+            id: string;
+            title: string;
+            price: number;
+            images: string[];
+            description: string;
+            category: Category;
+            taxes?: number;
+            }
+
+
+Luego en la vista del componente se podría renderizar esta propiedad:
+
+<p>Valor IVA: {{ product?.taxes | currency }}</p>
+<p>Valor IVA: {{ product.taxes ?? '' | currency }}</p>// Forma correcta
+
+El operador de optional chaining (?) permite que la propiedad solo se muestra si su valor no es nulo.

@@ -1,0 +1,81 @@
+Manejo de ambientes
+
+¿Dónde están mis environments?
+Si, como yo, vienes del futuro donde existe Angular 15 y superiores, debes saber que el equipo de Angular ha hecho una labor de minimizar los archivos necesarios para crear una aplicación, por lo que varios archivos han desaparecido. Debido a esto, es posible que no encuentres el directorio environments que utiliza Nico en esta clase. Pero no te preocupes, aún puedes usarlo.
+Para usar los ambientes lo que tendrás que hacer es agregarlos manualmente, lo que es bastante sencillo, te muestro cómo.
+
+Creando tus ambientes
+Primero necesitas ubicarte en el directorio src de tu aplicación.
+Estando en src vas a crear un directorio nuevo llamado environments.
+En este nuevo directorio, vas a crear tus ambientes. Inicialmente se utilizan dos: desarrollo y producción. Como el de desarrollo es el ambiente por defecto, puedes nombrarlo environment.ts. Por su parte, al ambiente de producción lo llamarás environment.prod.ts.
+Puedes crear más ambientes si lo necesitas, por ejemplo, puedes tener un ambiente staging y lo nombrarías environment.staging.ts.
+Una vez creados, lo importante es la configuración que les des. La configuración más básica es tal que así:
+
+            export const environment = {
+            production: false
+            };
+
+Esta te puede servir para tu ambiente de desarrollo (environment.ts). Para tener un ambiente de producción (environment.prod.ts), solo hace falta cambiar la propiedad production a true. Así:
+
+            export const environment = {
+            production: true
+            };
+
+A partir de aquí puedes agregar todas las configuración y variables que gustes, tal como muestra Nico.
+Por último, es importante notar que para que Angular sepa que quieres hacer un build con una determinada configuración, se lo debes indicar. Por ejemplo, para hacer un build para producción usaríamos:
+    ng build --prod
+
+
+
+Manejo de ambientes
+
+Los desarrolladores o desarrolladoras del Core de Angular ya pensaron en todos los problemas típicos que ocurren cuando programas en front-end. Uno de ellos es la posibilidad de diferenciar entre ambientes de un mismo proyecto.
+
+Ambientes de Desarrollo y Producción
+En tu proyecto de Angular encontrarás una carpeta llamada environments y por defecto con dos archivos dentro:
+
+environments.ts
+environments.prod.ts
+Ambos lucen de manera muy similar.
+
+            // environments.ts
+            // This file can be replaced during build by using the `fileReplacements` array.
+            // `ng build` replaces `environment.ts` with `environment.prod.ts`.
+            // The list of file replacements can be found in `angular.json`.
+
+            export const environment = {
+            production: false
+            };
+            // environments.prod.ts
+            export const environment = {
+            production: true
+            };
+
+Presta atención a los comentarios en el archivo environments.ts, pues explican como Angular, cuando compila la aplicación, se reemplaza por el correspondiente dependiendo del ambiente.
+
+Busca en el archivo angular.json la propiedad fileReplacements:
+
+            // angular.json
+            "fileReplacements": [
+            {
+                "replace": "src/environments/environment.ts",
+                "with": "src/environments/environment.prod.ts"
+            }
+            ],
+
+Como claramente indica, el archivo environment.ts será reemplazado por environment.prod.ts al compilar la aplicación en modo producción.
+
+Compilando en Modo Desarrollo y Producción
+Cuando haces un ng serve, la aplicación se compila en modo desarrollo por defecto. Esta configuración también puedes cambiarla en el angular.json:
+
+            // angular.json
+            "serve": {
+            ...
+            "defaultConfiguration": "development"
+            },
+
+Es equivalente a hacer un ng serve --configuration development.
+
+Mientras que cuando haces un ng serve --configuration production se compila en modo producción y utilizará las variables de entorno que le corresponda.
+
+De esta manera puedes manejar N cantidad de ambientes, cada uno con sus propias variables de entorno y su propia configuración dependiendo la necesidad.

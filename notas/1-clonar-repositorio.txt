@@ -1,0 +1,32 @@
+Para clonar el repositorio es necesario seguir los pasos de ser una version antigua de Angular 
+
+git clone https://github.com/platzi/angular-APIS.git
+
+Despues de que se clone debemos instalar las dependencias, por lo cual es necesario tener instalado node.js, yo instale la version mas actual del node.js
+
+luego abri, la carpeta en visual studio code y habilite los scripts de windows de la siguiente manera:
+
+abrir el power shell de windows como administrador y escribir : Set-ExecutionPolicy Unrestricted y darle que si
+
+luego regrese a visual studio code, y instale las dependencias con:
+    > npm install
+
+Si ocurren errores corri 
+    > npm audix fix
+    
+Si aparecen mas 
+    > npm audix fix --force
+
+luego si aparece un error, como el que me aparecio es por la version de angular que usa el proyecto que es la 12.1, esta toca actualizarla de la siguiente manera
+
+en la terminal escribir :
+    > ng update @angular/cli@13 @angular/core@13 --allow-dirty --force
+
+luego si no es suficiente actualizo a la siguiente:
+    > ng update @angular/cli@14 @angular/core@14 --allow-dirty --force
+
+hasta llegar a la version compatible
+    > ng update @angular/cli@15 @angular/core@15 --allow-dirty --force
+
+ y listo para verificar corri el comando 
+    > ng serve -o

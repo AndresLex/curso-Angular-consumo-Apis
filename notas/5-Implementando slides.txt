@@ -1,0 +1,37 @@
+Implementando slides
+
+        > npm i swiper --force
+
+Una necesidad crucial cuando se trabaja con Angular es la importación de componentes de terceros para un rápido desarrollo y utilización de los mismos.
+
+Cómo importar componentes de terceros
+Anímate a crear un carrusel de imágenes utilizando librerías como SwiperJS. Luego, instala la dependencia con el comando npm i swiper e impórtala en el módulo principal de tu aplicación para que esté lista para utilizarse.
+
+            import { SwiperModule } from 'swiper/angular';
+            @NgModule({
+            imports: [SwiperModule],
+            })
+            export class AppModule {}
+
+Es importante que sepas importar y utilizar este tipo de componentes ya listos para ser utilizados y agilizar así el desarrollo de cualquier aplicación.
+
+API de Prueba
+Existen muchas API gratuitas que puedes utilizar para practicar y construir aplicaciones, te comparto las más populares para que las investigues
+
+MockAPI
+OpenWeather
+Pokémon API
+The Rick and Morty API
+Anímate a explorar estas API y diviértete desarrollando aplicaciones y practicando todo lo que ya sabes sobre Angular hasta aquí. Más adelante en el curso verás cómo potenciar el consumo de API con Angular y sacarle mayor provecho a este framework.
+
+
+y el import en app.module
+import { SwiperModule } from ‘swiper/angular’;
+@NgModule({
+imports: [SwiperModule],
+})
+
+y en Style.scss, colocas esto:
+@import ‘swiper/scss’;
+@import ‘swiper/scss/navigation’;
+@import ‘swiper/scss/pagination’;

@@ -1,0 +1,39 @@
+Url Parameters / Paginación
+
+Los endpoints del tipo GET suelen recibir información por parámetros de URL. Por ejemplo:
+
+        https://example.com/api/productos?offset=0&limit=10
+        https://example.com/api/productos?q=XXXXX
+
+Pasaje de parámetros en Angular
+Angular posee un método sencillo para construir varias URL con parámetros para realizar consultas en API.
+
+            // services/api.service.ts
+            @Injectable({
+            providedIn: 'root'
+            })
+            export class ApiService {
+
+            constructor(
+                private http: HttpClient,
+            ) { }
+
+            getProductsParams(offset: number, limit: number): Observable<any> {
+                return this.http.get<Product[]>(`https://example.com/api/productos`, { params: { offset, limit } });
+            }
+            }
+
+Al avanzar al segundo argumento de las peticiones tipo GET un objeto params, Angular automaticamente convertirá las variables que entregues en ?offset=0&limit=10, utilizando sus respectivos nombres.
+
+En este ejemplo, las variables offset y limit suelen utilizarse para crear un paginador de registros. Offset (a veces también llamado “skip”) indica desde qué posición de la cantidad total de registros el backend tiene que devolver y Limit la cantidad total.
+
+            // components/catalogo/catalogo.components.ts
+            getProductsParams(): void {
+                this.apiService.getProductsParams(0, 10)
+                .subscribe(res => {
+                    this.productos = res;
+                });
+            }
+Al realizar la petición al backend, estamos indicando que devuelva desde la posición 0 un total de 10 registros. Si pasáramos los parámetros (30, 15), estaríamos indicando que desde el registro número 30 nos devuelva una cantidad de 15.
+
+Un buen backend suele permitir este tipo de paginación y dinamismo en sus endpoints que devuelven grandes cantidades de registros.

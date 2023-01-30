@@ -1,0 +1,29 @@
+Reintentar una petición
+
+Gracias a los observables en conjunto con RxJS puedes fácilmente implementar funcionalidades que de lo contrario sería complejo desarrollar por tu cuenta.
+
+Reintento automático de peticiones fallidas
+Para reintentar peticiones HTTP, puedes hacer que automáticamente vuelva a realizar otro intento si este llegara a fallar. Sería muy complejo su desarrollo casero ya que hay que recurrir a la recursividad y asincronicidad al mismo tiempo.
+
+            // services/api.service.ts
+            import { retry } from 'rxjs/operators';
+
+            @Injectable({
+            providedIn: 'root'
+            })
+            export class ApiService {
+
+            constructor(
+                private http: HttpClient,
+            ) { }
+
+            getProduct(idProduct: number): Observable<Product> {
+                return this.http.get<Product>(`https://example.com/api/productos/${idProduct}`)
+                .pipe(
+                    retry(2)
+                );
+            }
+
+            }
+
+El método .pipe() de los observables permite manipular datos y con la función retry() de RxJS le indicas la cantidad de reintentos que buscas para que la petición lo haga en caso de fallar.

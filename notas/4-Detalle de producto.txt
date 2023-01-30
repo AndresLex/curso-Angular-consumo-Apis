@@ -1,0 +1,61 @@
+Detalle de producto
+
+La solicitudes GET suelen utilizarse tanto para obtener un conjunto de registros, como para obtener uno solo. A continuación conocerás más sobre el proceso para crear una aplicación.
+
+Cómo obtener un producto por ID
+Cuando necesites obtener datos de un registro individual a través de su ID, el endpoint correspondiente para la petición suele recibir esa información como parte de su URL, por ejemplo https://example.com/api/producto/12, para obtener el producto con ID 12.
+
+No es del todo una buena práctica que un endpoint GET reciba datos por medio de un body. Es posible, pero no recomendable y no es natural en una API Rest. Tenlo en cuenta si eres tú quien desarrolla el backend también.
+
+            // services/api.service.ts
+            @Injectable({
+            providedIn: 'root'
+            })
+            export class ApiService {
+
+            constructor(
+                private http: HttpClient,
+            ) { }
+
+            getProducts(): Observable<Product[]> {
+                return this.http.get<Product[]>(`https://example.com/api/productos`);
+            }
+
+            getProduct(idProduct: number): Observable<Product> {
+                return this.http.get<Product>(`https://example.com/api/productos/${idProduct}`);
+            }
+            }
+
+En el servicio para realizar las peticiones HTTP, el método getProduct() recibe el ID como parámetro para concatenarlo a la URL.
+
+Simulando una API
+Si no tienes a disposición una API real para construir tu App, puedes simular peticiones HTTP en Angular con lo que se conoce como mock de datos. Un objeto que mantiene la estructura de datos real que tendrá la información de tu aplicación.
+
+            // services/api.service.ts
+            import { Observable, of } from 'rxjs';
+
+            @Injectable({
+            providedIn: 'root'
+            })
+            export class ApiService {
+
+            constructor(
+                private http: HttpClient,
+            ) { }
+
+            getProduct(idProduct: string): Observable<Product> {
+                return of(
+                {
+                    id: 1,
+                    name: 'Automobil de juguete',
+                    precio: 100,
+                    image: 'https://static3.depositphotos.com/1000865/118/i/600/depositphotos_1183767-stock-photo-toy-car.jpg'
+                }
+                );
+            }
+
+            }
+
+Utilizando la función of importándola desde RxJS, esta función convierte lo que sea que le envíes como parámetro, en un observable.
+
+De esta manera, tu componente recibirá la respuesta del observable como si fuese una API real que responde datos para construir tu aplicación.

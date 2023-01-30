@@ -1,0 +1,75 @@
+Los endpoints GET se utilizan para la obtención de datos, los endpoints POST para crearlos. Es momento de actualizarlos con PUT y PATCH.
+
+PUT vs. PATCH, ¿cuál es la diferencia?
+Técnicamente, los endpoints PUT deberían recibir todos los datos del registro a actualizar. Por ejemplo, el título, la descripción, el precio, la categoría, etc. En cambio, PATCH debería solo recibir un campo individual a actualizar como solo el título, o solo la categoría.
+
+De todos modos, también puedes utilizar endpoints del tipo PUT que reciban un solo dato a actualizar. Ten en cuenta que PUT es mucho más utilizado que PATCH, pero si quieres refinar y ser estricto con tu backend y seguir a raja tabla las buenas prácticas, PATCH es ideal para este tipo de actualizaciones de tus datos.
+
+Como generar una actualización de registros
+Para las solicitudes PUT y PATCH y generar una actualización de registros sigue los siguientes pasos.
+
+1. Crea las interfaces necesarias
+Crea las interfaces necesarias para actualizar los datos. Recuerda que la interfaz CreateProducto extendía de Product y a su vez omita los campos que no necesita utilizar.
+
+            // interfaces/producto.interface.ts
+            export interface Product {
+            id: number;
+            name: string;
+            precio: number;
+            description: string;
+            image: string;
+            category?: Category;
+            }
+
+            export interface CreateProducto extends Omit<Product, 'id' | 'category'> {
+            idCategory: string;
+            }
+
+A partir de aquí, crea la interfaz UpdateProducto que extiende de CreateProducto y a su vez utiliza una nueva característica de TypeScript llamada Partial<> que coloca como opcionales todos los campos. Al ser todos los campos opcionales, puedes utilizar esta interfaz para solicitudes PUT o PATCH según tengas la necesidad.
+
+            // interfaces/producto.interface.ts
+            export interface UpdateProducto extends Partial<CreateProducto> { }
+
+2. Maneja interfaces para HTTP
+Utiliza estas nuevas interfaces en el servicio para realizar peticiones HTTP
+
+            // services/api.service.ts
+            @Injectable({
+            providedIn: 'root'
+            })
+            export class ApiService {
+
+            constructor(
+                private http: HttpClient,
+            ) { }
+
+            // ...
+
+            updateProductPUT(idProduct: number, body: UpdateProducto): Observable<Product> {
+                return this.http.put<Product>(`https://example.com/api/productos`, body);
+            }
+
+            updateProductPATCH(idProduct: number, body: UpdateProducto): Observable<Product> {
+                return this.http.patch<Product>(`https://example.com/api/productos`, body);
+            }
+            }
+
+Ya sea que los endpoints del backend sean PUT o PACH, podrás realizar la solicitud y mantener tus datos tipados y tu aplicación más segura de errores.
+
+3. Haz la solicitud para actualizar el producto
+Finalmente, desde tu componente, realiza la solicitud para actualizar el producto. Cuando recibas el producto actualizado, deberás reemplazarlo por el producto viejo en tu lista de productos.
+
+            // components/catalogo/catalogo.component.ts
+            updateProduct(idProduct: number): void {
+                const body: UpdateProducto = {
+                name: 'Nuevo nombre del producto',
+                };
+                this.apiService.updateProductPATCH(idProduct, body)
+                .subscribe(p => {
+                    // Reemplazamos el producto actualizado en el Array de productos
+                    const index = this.productos.findIndex(product => product.id === p.id);
+                    this.productos[index] = p;
+                });
+            }
+
+Si no utilizas PATCH y todos tus endpoints son PUT, eso está bien. No tiene que preocuparte.

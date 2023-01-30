@@ -1,0 +1,42 @@
+Solicitudes DELETE
+
+CRUD = Create Read Update Delete
+
+En programación, el verbo HTTP DELETE se utiliza para solicitudes que eliminen del registro una base y puedan modificar el estado del servidor a diferencia de los verbos HEAD y GET
+
+Borrando registros en Javascript
+El DELETE es mucho más sencillo, ya que no necesitas de tipado de datos. Solo con el ID del registro que quieres borrar suele ser suficiente.
+
+            // services/api.service.ts
+            @Injectable({
+            providedIn: 'root'
+            })
+            export class ApiService {
+
+            constructor(private http: HttpClient,) { }
+            
+            // ...
+
+            deleteProduct(idProduct: number): Observable<boolean> {
+                return this.http.delete<boolean>(`https://example.com/api/productos/${idProduct}`);
+            }
+            }
+
+Este tipo de endpoint suele devolver un booleano, o un objeto con alguna propiedad booleana, que indica si el registro fue borrado o no. Desde tu componente, únicamente le envías el ID como parámetro al método y si el registro fue borrado correctamente, puedes eliminarlo de tu lista de productos.
+
+            // components/catalogo/catalogo.component.ts
+            deleteProduct(idProduct: number): void {
+                this.apiService.deleteProduct(idProduct)
+                .subscribe(p => {
+                    if (p) {
+                    // Borramos el producto del Array de productos
+                    const index = this.productos.findIndex(product => product.id === idProduct);
+                    this.productos.splice(index, 1);
+                    }
+                });
+            }
+
+Baja lógica vs. baja física
+Los endpoints del tipo DELETE, realmente no borran el registro como tal en la base de datos la mayoría de veces. En cambio, únicamente modifican un booleando colocándolo en false para que dicho registro ya no esté disponible.
+
+A eso se lo conoce como Baja Lógica, mientras que la Baja Física si borra el registro completamente de la base de datos sin poder recuperarse. Es importante que conozcas la diferencia, ya que en aplicaciones profesionales suele utilizarse siempre la Baja Lógica, el registro ya no estará disponible, pero continúa existiendo.
